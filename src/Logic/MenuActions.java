@@ -1,5 +1,6 @@
 package Logic;
 
+import AI.AiDifficulty;
 import Fancy.Characters;
 import Fancy.Theme;
 import GUI.Play;
@@ -20,23 +21,68 @@ public class MenuActions {
     }
 
     public static void showModeDialog(JFrame parent) {
-        String[] options = {"3x3", "5x5"};
-        String choice = themedInputDialog(
+        String[] sizeOptions = {"3x3", "5x5"};
+        String sizeChoice = themedInputDialog(
                 parent,
                 "Choose board size",
                 "Mode",
-                options,
-                options[0]
+                sizeOptions,
+                sizeOptions[0]
         );
-        if (choice == null) return;
+        if (sizeChoice == null) return;
 
-        if (choice.startsWith("3")) {
+        String[] modeOptions = {"Human vs Human", "Human vs AI"};
+        String modeChoice = themedInputDialog(
+                parent,
+                "Choose game mode",
+                "Mode",
+                modeOptions,
+                modeOptions[0]
+        );
+        if (modeChoice == null) return;
+
+        if (sizeChoice.startsWith("3")) {
             logic.setBoardSize(3);
         } else {
             logic.setBoardSize(5);
         }
 
-        themedMessageDialog(parent, "Mode set to " + choice, "Mode");
+        if (modeChoice.startsWith("Human vs AI")) {
+            String[] difficultyOptions = {"Easy", "Normal", "Hard"};
+            String difficultyChoice = themedInputDialog(
+                    parent,
+                    "Choose AI difficulty",
+                    "Difficulty",
+                    difficultyOptions,
+                    difficultyOptions[1]
+            );
+            if (difficultyChoice == null) return;
+
+            AiDifficulty difficulty;
+            switch (difficultyChoice) {
+                case "Easy":
+                    difficulty = AiDifficulty.EASY;
+                    break;
+                case "Hard":
+                    difficulty = AiDifficulty.HARD;
+                    break;
+                case "Normal":
+                default:
+                    difficulty = AiDifficulty.NORMAL;
+                    break;
+            }
+
+            logic.setAiEnabled(true);
+            logic.setAiDifficulty(difficulty);
+            logic.setAiSymbol("🤖");
+            themedMessageDialog(parent,
+                    "Mode set to " + sizeChoice + " - Human vs AI (" + difficultyChoice + ")",
+                    "Mode");
+            return;
+        }
+
+        logic.setAiEnabled(false);
+        themedMessageDialog(parent, "Mode set to " + sizeChoice + " - Human vs Human", "Mode");
     }
 
     public static void showThemeDialog(JFrame parent) {
