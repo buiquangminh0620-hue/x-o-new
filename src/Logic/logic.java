@@ -1,5 +1,8 @@
 package Logic;
 
+import AI.AiDifficulty;
+import AI.AiEngine;
+import AI.AiMove;
 import Fancy.Theme;
 
 import javax.swing.*;
@@ -22,6 +25,10 @@ public class logic {
     private static int boardSize = 3;
     private static int winLength = 3;
     private static Theme theme = Theme.EARTH;
+
+    private static boolean aiEnabled = false;
+    private static AiDifficulty aiDifficulty = AiDifficulty.NORMAL;
+    private static String aiSymbol = "🤖";
 
     public static int getBoardSize() {
         return boardSize;
@@ -48,7 +55,14 @@ public class logic {
         if (x == null || x.trim().isEmpty()) x = "X";
         if (o == null || o.trim().isEmpty()) o = "O";
         playerX = x;
-        playerO = o;
+        if (aiEnabled) {
+            if (aiSymbol == null || aiSymbol.trim().isEmpty()) {
+                aiSymbol = "🤖";
+            }
+            playerO = aiSymbol;
+        } else {
+            playerO = o;
+        }
         currentPlayer = playerX;
         if (statusLabel != null) {
             statusLabel.setText(">>> Player " + currentPlayer + "'s Turn <<<");
@@ -61,6 +75,42 @@ public class logic {
 
     public static String getPlayerO() {
         return playerO;
+    }
+
+    public static boolean isAiEnabled() {
+        return aiEnabled;
+    }
+
+    public static void setAiEnabled(boolean enabled) {
+        aiEnabled = enabled;
+        if (aiEnabled) {
+            if (aiSymbol == null || aiSymbol.trim().isEmpty()) {
+                aiSymbol = "🤖";
+            }
+            playerO = aiSymbol;
+        }
+    }
+
+    public static AiDifficulty getAiDifficulty() {
+        return aiDifficulty;
+    }
+
+    public static void setAiDifficulty(AiDifficulty difficulty) {
+        if (difficulty != null) {
+            aiDifficulty = difficulty;
+        }
+    }
+
+    public static String getAiSymbol() {
+        return aiSymbol;
+    }
+
+    public static void setAiSymbol(String symbol) {
+        if (symbol == null || symbol.trim().isEmpty()) return;
+        aiSymbol = symbol;
+        if (aiEnabled) {
+            playerO = aiSymbol;
+        }
     }
 
     public static void initMenuGame(JButton[] boardButtons, JLabel status, JLabel p1Score, JLabel p2Score) {
@@ -84,25 +134,19 @@ public class logic {
         if(end) return;
         if(!clicked.getText().equals("")) return;
 
+        applyMove(clicked);
+
+        if (aiEnabled && !end && currentPlayer.equals(aiSymbol)) {
+            performAiMove();
+        }
+    }
+
+    private static void applyMove(JButton clicked) {
         clicked.setText(currentPlayer);
 
         if(checkWin()){ 
             end = true;
-            if(currentPlayer.equals(playerX)) {
-                player1Score++;
-                if(player1ScoreLabel != null) {
-                    player1ScoreLabel.setText(String.valueOf(player1Score));
-                    player1ScoreLabel.revalidate();
-                    player1ScoreLabel.repaint();
-                }
-            } else {
-                player2Score++;
-                if(player2ScoreLabel != null) {
-                    player2ScoreLabel.setText(String.valueOf(player2Score));
-                    player2ScoreLabel.revalidate();
-                    player2ScoreLabel.repaint();
-                }
-            }
+            updateScoreForCurrentPlayer();
             JOptionPane.showMessageDialog(null, currentPlayer + " thắng!");
             return;
         }
@@ -111,6 +155,42 @@ public class logic {
         if(statusLabel != null) {
             statusLabel.setText(">>> Player " + currentPlayer + "'s Turn <<<");
         }
+    }
+
+    private static void updateScoreForCurrentPlayer() {
+        if(currentPlayer.equals(playerX)) {
+            player1Score++;
+            if(player1ScoreLabel != null) {
+                player1ScoreLabel.setText(String.valueOf(player1Score));
+                player1ScoreLabel.revalidate();
+                player1ScoreLabel.repaint();
+            }
+        } else {
+            player2Score++;
+            if(player2ScoreLabel != null) {
+                player2ScoreLabel.setText(String.valueOf(player2Score));
+                player2ScoreLabel.revalidate();
+                player2ScoreLabel.repaint();
+            }
+        }
+    }
+
+    private static void performAiMove() {
+        if (btn == null) return;
+        String[][] board = new String[boardSize][boardSize];
+        for (int r = 0; r < boardSize; r++) {
+            for (int c = 0; c < boardSize; c++) {
+                board[r][c] = btn[r][c].getText();
+            }
+        }
+
+        AiMove move = AiEngine.pickMove(board, aiSymbol, playerX, aiDifficulty, winLength);
+        if (move == null) return;
+        if (move.row < 0 || move.row >= boardSize || move.col < 0 || move.col >= boardSize) return;
+
+        JButton target = btn[move.row][move.col];
+        if (target == null || !target.getText().isEmpty()) return;
+        applyMove(target);
     }
 
     private static boolean checkWin(){
@@ -239,8 +319,8 @@ public class logic {
             JPanel board = new JPanel(new GridLayout(boardSize, boardSize));
 
             int fontSize = (boardSize == 3) ? 40 : 24;
-            for(int i=0;i<boardSize;i++){ 
-                for(int j=0;j<boardSize;j++){ 
+            for(int i=0;i<boardSize;i++){
+                for(int j=0;j<boardSize;j++){
                     btnLocal[i][j] = new JButton("");
                     btnLocal[i][j].setFont(new Font("Arial", Font.BOLD, fontSize));
                     btnLocal[i][j].addActionListener(this);
