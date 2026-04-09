@@ -147,7 +147,19 @@ public class logic {
         if(checkWin()){ 
             end = true;
             updateScoreForCurrentPlayer();
+            if (statusLabel != null) {
+                statusLabel.setText("Winner: " + currentPlayer);
+            }
             JOptionPane.showMessageDialog(null, currentPlayer + " thắng!");
+            return;
+        }
+
+        if (isBoardFull()) {
+            end = true;
+            if (statusLabel != null) {
+                statusLabel.setText("Draw!");
+            }
+            JOptionPane.showMessageDialog(null, "Draw!", "Draw", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -206,6 +218,18 @@ public class logic {
             }
         }
         return false;
+    }
+
+    private static boolean isBoardFull() {
+        if (btn == null) return false;
+        for (int r = 0; r < boardSize; r++) {
+            for (int c = 0; c < boardSize; c++) {
+                if (btn[r][c].getText().equals("")) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private static boolean hasLine(int r, int c, int dr, int dc, String mark) {
@@ -348,7 +372,15 @@ public class logic {
 
             if(checkWinLocal()){ 
                 endLocal = true;
+                status.setText("Winner: " + player);
                 JOptionPane.showMessageDialog(this, player + " thắng!");
+                return;
+            }
+
+            if (isBoardFullLocal()) {
+                endLocal = true;
+                status.setText("Draw!");
+                JOptionPane.showMessageDialog(this, "Draw!", "Draw", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
 
@@ -368,6 +400,17 @@ public class logic {
                 }
             }
             return false;
+        }
+
+        private boolean isBoardFullLocal(){
+            for (int r = 0; r < boardSize; r++) {
+                for (int c = 0; c < boardSize; c++) {
+                    if (btnLocal[r][c].getText().equals("")) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         private boolean hasLineLocal(int r, int c, int dr, int dc, String mark) {
