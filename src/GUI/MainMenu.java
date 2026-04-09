@@ -7,6 +7,8 @@ import Logic.logic;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MainMenu extends JFrame {
 
@@ -24,40 +26,43 @@ public class MainMenu extends JFrame {
         setLocationRelativeTo(null);
         setTitle("Tic Tac Toe - Main Menu");
 
-        JPanel root = new JPanel(new BorderLayout());
-        root.setBackground(BG);
+        GradientPanel root = new GradientPanel(BG, PRIMARY_DARK.darker());
+        root.setLayout(new BorderLayout());
+        root.setBorder(new EmptyBorder(20, 30, 30, 30));
         setContentPane(root);
 
         JPanel headerPanel = new JPanel(new GridBagLayout());
-        headerPanel.setBackground(BG);
-        headerPanel.setBorder(new EmptyBorder(30, 20, 20, 20));
+        headerPanel.setOpaque(false);
+        headerPanel.setBorder(new EmptyBorder(20, 10, 10, 10));
 
         JLabel titleLabel = new JLabel("TIC TAC TOE");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 56));
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 60));
         titleLabel.setForeground(ACCENT);
-        headerPanel.add(titleLabel);
+
+        JLabel subTitle = new JLabel("Choose your challenge and play!");
+        subTitle.setFont(new Font("SansSerif", Font.PLAIN, 20));
+        subTitle.setForeground(TEXT);
+
+        Box titleBox = Box.createVerticalBox();
+        titleBox.add(titleLabel);
+        titleBox.add(Box.createVerticalStrut(6));
+        titleBox.add(subTitle);
+        headerPanel.add(titleBox);
         root.add(headerPanel, BorderLayout.NORTH);
 
         JPanel center = new JPanel(new GridBagLayout());
-        center.setBackground(BG);
+        center.setOpaque(false);
         center.setBorder(new EmptyBorder(20, 20, 40, 20));
 
-        RoundedPanel menuCard = new RoundedPanel(30);
-        menuCard.setBackground(PRIMARY_DARK);
+        RoundedPanel menuCard = new RoundedPanel(28);
+        menuCard.setBackground(new Color(0, 0, 0, 130));
         menuCard.setBorder(new EmptyBorder(30, 60, 30, 60));
-        menuCard.setLayout(new GridLayout(4, 1, 0, 20));
+        menuCard.setLayout(new GridLayout(4, 1, 0, 18));
 
-        JButton playBtn = menuButton("Play", TEXT);
-        playBtn.addActionListener(e -> MenuActions.openPlay(this));
-
-        JButton modeBtn = menuButton("Mode", TEXT);
-        modeBtn.addActionListener(e -> MenuActions.showModeDialog(this));
-
-        JButton colorBtn = menuButton("Color", TEXT);
-        colorBtn.addActionListener(e -> MenuActions.showThemeDialog(this));
-
-        JButton characterBtn = menuButton("Character", TEXT);
-        characterBtn.addActionListener(e -> MenuActions.showCharacterDialog(this));
+        JComponent playBtn = gameButton("▶ Play", PRIMARY, TEXT, ACCENT, () -> MenuActions.openPlay(this));
+        JComponent modeBtn = gameButton("⚙ Mode", PRIMARY, TEXT, ACCENT, () -> MenuActions.showModeDialog(this));
+        JComponent colorBtn = gameButton("🎨 Color", PRIMARY, TEXT, ACCENT, () -> MenuActions.showThemeDialog(this));
+        JComponent characterBtn = gameButton("★ Character", PRIMARY, TEXT, ACCENT, () -> MenuActions.showCharacterDialog(this));
 
         menuCard.add(playBtn);
         menuCard.add(modeBtn);
@@ -66,28 +71,59 @@ public class MainMenu extends JFrame {
 
         center.add(menuCard);
         root.add(center, BorderLayout.CENTER);
+
+        JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        footer.setOpaque(false);
+        JLabel hint = new JLabel("Tip: Use the settings to switch board size and theme!");
+        hint.setForeground(TEXT);
+        hint.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        footer.add(hint);
+        root.add(footer, BorderLayout.SOUTH);
     }
 
-    private static JButton menuButton(String text, Color fg) {
-        JButton b = new JButton(text);
-        b.setForeground(fg);
-        b.setFont(new Font("Arial", Font.BOLD, 26));
-        b.setOpaque(false);
-        b.setContentAreaFilled(false);
-        b.setBorderPainted(false);
-        b.setFocusPainted(false);
-        b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    private static JComponent gameButton(String text, Color bg, Color fg, Color glow, Runnable action) {
+        JButton btn = new JButton(text);
+        btn.setForeground(fg);
+        btn.setFont(new Font("SansSerif", Font.BOLD, 24));
+        btn.setOpaque(false);
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        b.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                b.setFont(new Font("Arial", Font.BOLD, 30));
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                b.setFont(new Font("Arial", Font.BOLD, 26));
-            }
+        RoundedButton wrap = new RoundedButton(22, bg, glow);
+        wrap.setBorder(new EmptyBorder(12, 20, 12, 20));
+        wrap.setLayout(new BorderLayout());
+        wrap.add(btn, BorderLayout.CENTER);
+        wrap.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        btn.addActionListener(e -> action.run());
+        btn.addMouseListener(new MouseAdapter() {
+            @Override public void mouseEntered(MouseEvent e) { wrap.setHover(true); }
+            @Override public void mouseExited(MouseEvent e) { wrap.setHover(false); }
         });
 
-        return b;
+        return wrap;
+    }
+
+    static class GradientPanel extends JPanel {
+        private final Color top;
+        private final Color bottom;
+
+        GradientPanel(Color top, Color bottom) {
+            this.top = top;
+            this.bottom = bottom;
+            setOpaque(false);
+        }
+
+        @Override protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setPaint(new GradientPaint(0, 0, top, 0, getHeight(), bottom));
+            g2.fillRect(0, 0, getWidth(), getHeight());
+            g2.dispose();
+            super.paintComponent(g);
+        }
     }
 
     static class RoundedPanel extends JPanel {
@@ -99,6 +135,43 @@ public class MainMenu extends JFrame {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setColor(getBackground());
             g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+            g2.dispose();
+            super.paintComponent(g);
+        }
+    }
+
+    static class RoundedButton extends JPanel {
+        private final int arc;
+        private final Color base;
+        private final Color glow;
+        private boolean hover;
+
+        RoundedButton(int arc, Color base, Color glow) {
+            this.arc = arc;
+            this.base = base;
+            this.glow = glow;
+            setOpaque(false);
+        }
+
+        void setHover(boolean hover) {
+            this.hover = hover;
+            repaint();
+        }
+
+        @Override protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2.setColor(new Color(0, 0, 0, 90));
+            g2.fillRoundRect(4, 5, getWidth() - 8, getHeight() - 8, arc, arc);
+
+            Color fill = hover ? glow : base;
+            g2.setColor(fill);
+            g2.fillRoundRect(0, 0, getWidth() - 4, getHeight() - 4, arc, arc);
+
+            g2.setColor(new Color(255, 255, 255, hover ? 60 : 30));
+            g2.drawRoundRect(1, 1, getWidth() - 6, getHeight() - 6, arc, arc);
+
             g2.dispose();
             super.paintComponent(g);
         }
