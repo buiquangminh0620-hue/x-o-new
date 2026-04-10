@@ -47,16 +47,14 @@ public class Play extends JFrame {
         titleLabel.setForeground(ACCENT);
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
-        JPanel navBar = new JPanel(new GridLayout(1, 4, 12, 0));
+        JPanel navBar = new JPanel(new GridLayout(1, 3, 12, 0));
         navBar.setOpaque(false);
 
         JComponent settingBtn = navButton("⚙ Settings", TEXT, ACCENT, () -> logic.handleSettingsClick());
-        JComponent loginBtn = navButton("→ Login", TEXT, ACCENT, () -> new dangnhap());
         JComponent rulesBtn = navButton("ℹ Rules", TEXT, ACCENT, () -> logic.handleRulesClick());
         JComponent exitBtn = navButton("✖ Exit", TEXT, ACCENT, () -> logic.handleExitClick());
 
         navBar.add(settingBtn);
-        navBar.add(loginBtn);
         navBar.add(rulesBtn);
         navBar.add(exitBtn);
 
@@ -114,20 +112,12 @@ public class Play extends JFrame {
         bottomGbc.gridx = 0;
         bottom.add(newGameBtn, bottomGbc);
 
-        JComponent undoBtn = actionButton("Undo", PRIMARY, TEXT, ACCENT, () -> logic.handleUndoClick());
-        bottomGbc.gridx = 1;
-        bottom.add(undoBtn, bottomGbc);
-
-        JComponent hintBtn = actionButton("Hint", PRIMARY, TEXT, ACCENT, () -> logic.handleHintClick());
-        bottomGbc.gridx = 2;
-        bottom.add(hintBtn, bottomGbc);
-
         JComponent backBtn = actionButton("Back to Menu", PRIMARY, TEXT, ACCENT, () -> {
             dispose();
             MainMenu menu = new MainMenu();
             menu.setVisible(true);
         });
-        bottomGbc.gridx = 3;
+        bottomGbc.gridx = 1;
         bottom.add(backBtn, bottomGbc);
 
         root.add(bottom, BorderLayout.SOUTH);
@@ -267,6 +257,7 @@ public class Play extends JFrame {
             g2.dispose();
             super.paintComponent(g);
         }
+    
     }
 
     static class RoundedPanel extends JPanel {
