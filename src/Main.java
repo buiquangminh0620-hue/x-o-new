@@ -1,4 +1,4 @@
-import GUI.MainMenu;
+import GUI.dangnhap;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,8 +22,7 @@ public class Main {
 
             setGlobalFont(new Font("SansSerif", Font.PLAIN, 16));
 
-            MainMenu ui = new MainMenu();
-            ui.setVisible(true);
+            new dangnhap();
         });
     }
 }
