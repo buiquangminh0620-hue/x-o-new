@@ -20,20 +20,26 @@ public class dangnhap extends JFrame {
         Color ACCENT = theme.accent;
 
         setTitle("Player Login");
-        setSize(520, 380);
+        setSize(620, 460);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         GradientPanel root = new GradientPanel(BG, PRIMARY_DARK.darker());
         root.setLayout(new BorderLayout());
-        root.setBorder(new EmptyBorder(20, 28, 28, 28));
+        root.setBorder(new EmptyBorder(24, 32, 32, 32));
         setContentPane(root);
 
+        JPanel header = new JPanel(new BorderLayout());
+        header.setOpaque(false);
         JLabel title = new JLabel("WELCOME BACK");
         title.setFont(new Font("SansSerif", Font.BOLD, 28));
         title.setForeground(ACCENT);
-        title.setHorizontalAlignment(SwingConstants.CENTER);
-        root.add(title, BorderLayout.NORTH);
+        JLabel subtitle = new JLabel("Sign in to continue");
+        subtitle.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        subtitle.setForeground(TEXT);
+        header.add(title, BorderLayout.NORTH);
+        header.add(subtitle, BorderLayout.SOUTH);
+        root.add(header, BorderLayout.NORTH);
 
         RoundedPanel card = new RoundedPanel(22);
         card.setBackground(new Color(0, 0, 0, 140));
@@ -59,18 +65,28 @@ public class dangnhap extends JFrame {
         gbc.gridy++;
         card.add(passField, gbc);
 
-        JPanel actions = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 12));
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 12));
         actions.setOpaque(false);
 
-        JComponent loginBtn = actionButton("Login", PRIMARY, TEXT, ACCENT, () ->
-                JOptionPane.showMessageDialog(this, "Login feature coming soon"));
-        JComponent cancelBtn = actionButton("Close", PRIMARY_DARK, TEXT, ACCENT, this::dispose);
+        JComponent loginBtn = actionButton("Login", PRIMARY, TEXT, ACCENT, () -> {
+            MainMenu menu = new MainMenu();
+            menu.setVisible(true);
+            dispose();
+        });
+        JComponent signupBtn = outlineButton("Sign Up", PRIMARY, TEXT, ACCENT, () -> {
+            Signup signup = new Signup();
+            signup.setVisible(true);
+            dispose();
+        });
+        JComponent cancelBtn = outlineButton("Exit", PRIMARY_DARK, TEXT, ACCENT, () -> System.exit(0));
 
         actions.add(loginBtn);
+        actions.add(signupBtn);
         actions.add(cancelBtn);
 
         JPanel centerWrap = new JPanel(new BorderLayout());
         centerWrap.setOpaque(false);
+        centerWrap.setBorder(new EmptyBorder(18, 0, 0, 0));
         centerWrap.add(card, BorderLayout.CENTER);
         centerWrap.add(actions, BorderLayout.SOUTH);
 
@@ -89,10 +105,10 @@ public class dangnhap extends JFrame {
         JTextField field = new JTextField();
         field.setFont(new Font("SansSerif", Font.PLAIN, 16));
         field.setForeground(fg);
-        field.setBackground(new Color(255, 255, 255, 230));
+        field.setBackground(new Color(255, 255, 255, 235));
         field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(255, 255, 255, 80), 1),
-                new EmptyBorder(8, 10, 8, 10)));
+                BorderFactory.createLineBorder(new Color(255, 255, 255, 90), 1),
+                new EmptyBorder(10, 12, 10, 12)));
         return field;
     }
 
@@ -100,10 +116,10 @@ public class dangnhap extends JFrame {
         JPasswordField field = new JPasswordField();
         field.setFont(new Font("SansSerif", Font.PLAIN, 16));
         field.setForeground(fg);
-        field.setBackground(new Color(255, 255, 255, 230));
+        field.setBackground(new Color(255, 255, 255, 235));
         field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(255, 255, 255, 80), 1),
-                new EmptyBorder(8, 10, 8, 10)));
+                BorderFactory.createLineBorder(new Color(255, 255, 255, 90), 1),
+                new EmptyBorder(10, 12, 10, 12)));
         return field;
     }
 
@@ -118,7 +134,31 @@ public class dangnhap extends JFrame {
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         RoundedButton wrap = new RoundedButton(18, base, glow);
-        wrap.setBorder(new EmptyBorder(10, 24, 10, 24));
+        wrap.setBorder(new EmptyBorder(10, 28, 10, 28));
+        wrap.setLayout(new BorderLayout());
+        wrap.add(btn, BorderLayout.CENTER);
+
+        btn.addActionListener(e -> action.run());
+        btn.addMouseListener(new MouseAdapter() {
+            @Override public void mouseEntered(MouseEvent e) { wrap.setHover(true); }
+            @Override public void mouseExited(MouseEvent e) { wrap.setHover(false); }
+        });
+
+        return wrap;
+    }
+
+    private static JComponent outlineButton(String text, Color base, Color fg, Color glow, Runnable action) {
+        JButton btn = new JButton(text);
+        btn.setForeground(fg);
+        btn.setFont(new Font("SansSerif", Font.BOLD, 16));
+        btn.setOpaque(false);
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        RoundedButton wrap = new RoundedButton(18, new Color(0, 0, 0, 90), glow);
+        wrap.setBorder(new EmptyBorder(10, 28, 10, 28));
         wrap.setLayout(new BorderLayout());
         wrap.add(btn, BorderLayout.CENTER);
 
