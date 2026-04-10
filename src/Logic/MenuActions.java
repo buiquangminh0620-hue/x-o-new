@@ -143,15 +143,21 @@ public class MenuActions {
 
     private static String themedInputDialog(JFrame parent, String message, String title, String[] options, String initial) {
         Theme theme = logic.getTheme();
-        return withTheme(theme, () -> (String) JOptionPane.showInputDialog(
-                parent,
-                message,
-                title,
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                options,
-                initial
-        ));
+        return withTheme(theme, () -> {
+            JOptionPane pane = new JOptionPane(message, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+            pane.setWantsInput(true);
+            pane.setSelectionValues(options);
+            pane.setInitialSelectionValue(initial);
+            JDialog dialog = pane.createDialog(parent, title);
+            dialog.setAlwaysOnTop(true);
+            dialog.setModal(true);
+            dialog.setVisible(true);
+            Object value = pane.getInputValue();
+            if (value == null || value == JOptionPane.UNINITIALIZED_VALUE) {
+                return null;
+            }
+            return value.toString();
+        });
     }
 
     private static void themedMessageDialog(JFrame parent, String message, String title) {
