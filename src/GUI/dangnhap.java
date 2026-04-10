@@ -20,30 +20,30 @@ public class dangnhap extends JFrame {
         Color ACCENT = theme.accent;
 
         setTitle("Player Login");
-        setSize(620, 460);
+        setSize(720, 520);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         GradientPanel root = new GradientPanel(BG, PRIMARY_DARK.darker());
         root.setLayout(new BorderLayout());
-        root.setBorder(new EmptyBorder(24, 32, 32, 32));
+        root.setBorder(new EmptyBorder(28, 36, 36, 36));
         setContentPane(root);
 
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
         JLabel title = new JLabel("WELCOME BACK");
-        title.setFont(new Font("SansSerif", Font.BOLD, 28));
+        title.setFont(new Font("SansSerif", Font.BOLD, 30));
         title.setForeground(ACCENT);
-        JLabel subtitle = new JLabel("Sign in to continue");
+        JLabel subtitle = new JLabel("Sign in to continue your game");
         subtitle.setFont(new Font("SansSerif", Font.PLAIN, 16));
         subtitle.setForeground(TEXT);
         header.add(title, BorderLayout.NORTH);
         header.add(subtitle, BorderLayout.SOUTH);
         root.add(header, BorderLayout.NORTH);
 
-        RoundedPanel card = new RoundedPanel(22);
-        card.setBackground(new Color(0, 0, 0, 140));
-        card.setBorder(new EmptyBorder(24, 24, 24, 24));
+        RoundedPanel card = new RoundedPanel(24);
+        card.setBackground(new Color(0, 0, 0, 150));
+        card.setBorder(new EmptyBorder(28, 28, 28, 28));
         card.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -51,6 +51,7 @@ public class dangnhap extends JFrame {
         gbc.gridy = 0;
         gbc.insets = new Insets(8, 0, 8, 0);
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
 
         JLabel userLabel = label("Username", TEXT);
         JTextField userField = field(TEXT);
@@ -65,28 +66,28 @@ public class dangnhap extends JFrame {
         gbc.gridy++;
         card.add(passField, gbc);
 
-        JPanel actions = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 12));
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 10));
         actions.setOpaque(false);
 
-        JComponent loginBtn = actionButton("Login", PRIMARY, TEXT, ACCENT, () -> {
+        JComponent continueBtn = actionButton("Continue", PRIMARY, TEXT, ACCENT, () -> {
             MainMenu menu = new MainMenu();
             menu.setVisible(true);
             dispose();
         });
-        JComponent signupBtn = outlineButton("Sign Up", PRIMARY, TEXT, ACCENT, () -> {
+        JComponent signupBtn = outlineButton("Create Account", PRIMARY, TEXT, ACCENT, () -> {
             Signup signup = new Signup();
             signup.setVisible(true);
             dispose();
         });
-        JComponent cancelBtn = outlineButton("Exit", PRIMARY_DARK, TEXT, ACCENT, () -> System.exit(0));
+        JComponent exitBtn = outlineButton("Exit", PRIMARY_DARK, TEXT, ACCENT, () -> System.exit(0));
 
-        actions.add(loginBtn);
+        actions.add(continueBtn);
         actions.add(signupBtn);
-        actions.add(cancelBtn);
+        actions.add(exitBtn);
 
         JPanel centerWrap = new JPanel(new BorderLayout());
         centerWrap.setOpaque(false);
-        centerWrap.setBorder(new EmptyBorder(18, 0, 0, 0));
+        centerWrap.setBorder(new EmptyBorder(20, 0, 0, 0));
         centerWrap.add(card, BorderLayout.CENTER);
         centerWrap.add(actions, BorderLayout.SOUTH);
 
@@ -108,7 +109,7 @@ public class dangnhap extends JFrame {
         field.setBackground(new Color(255, 255, 255, 235));
         field.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(255, 255, 255, 90), 1),
-                new EmptyBorder(10, 12, 10, 12)));
+                new EmptyBorder(12, 12, 12, 12)));
         return field;
     }
 
@@ -119,7 +120,7 @@ public class dangnhap extends JFrame {
         field.setBackground(new Color(255, 255, 255, 235));
         field.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(255, 255, 255, 90), 1),
-                new EmptyBorder(10, 12, 10, 12)));
+                new EmptyBorder(12, 12, 12, 12)));
         return field;
     }
 
@@ -158,7 +159,7 @@ public class dangnhap extends JFrame {
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         RoundedButton wrap = new RoundedButton(18, new Color(0, 0, 0, 90), glow);
-        wrap.setBorder(new EmptyBorder(10, 28, 10, 28));
+        wrap.setBorder(new EmptyBorder(10, 24, 10, 24));
         wrap.setLayout(new BorderLayout());
         wrap.add(btn, BorderLayout.CENTER);
 
