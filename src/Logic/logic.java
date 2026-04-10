@@ -139,6 +139,14 @@ public class logic {
         if (aiEnabled && !end && currentPlayer.equals(aiSymbol)) {
             performAiMove();
         }
+
+        if (!end && isBoardFull()) {
+            end = true;
+            if (statusLabel != null) {
+                statusLabel.setText("Draw!");
+            }
+            JOptionPane.showMessageDialog(null, "Draw!", "Draw", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     private static void applyMove(JButton clicked) {
@@ -343,8 +351,8 @@ public class logic {
             JPanel board = new JPanel(new GridLayout(boardSize, boardSize));
 
             int fontSize = (boardSize == 3) ? 40 : 24;
-            for(int i=0;i<boardSize;i++){
-                for(int j=0;j<boardSize;j++){
+            for(int i=0;i<boardSize;i++){    
+                for(int j=0;j<boardSize;j++){    
                     btnLocal[i][j] = new JButton("");
                     btnLocal[i][j].setFont(new Font("Arial", Font.BOLD, fontSize));
                     btnLocal[i][j].addActionListener(this);
