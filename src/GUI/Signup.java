@@ -20,24 +20,24 @@ public class Signup extends JFrame {
         Color ACCENT = theme.accent;
 
         setTitle("Create Account");
-        setSize(860, 600);
+        setSize(760, 560);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         GradientPanel root = new GradientPanel(BG, PRIMARY_DARK.darker());
         root.setLayout(new BorderLayout());
-        root.setBorder(new EmptyBorder(28, 36, 36, 36));
+        root.setBorder(new EmptyBorder(24, 30, 30, 30));
         setContentPane(root);
 
         JPanel header = new JPanel();
         header.setOpaque(false);
         header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
         JLabel title = new JLabel("CREATE ACCOUNT");
-        title.setFont(new Font("SansSerif", Font.BOLD, 32));
+        title.setFont(new Font("SansSerif", Font.BOLD, 30));
         title.setForeground(ACCENT);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         JLabel subtitle = new JLabel("Join the Tic Tac Toe community");
-        subtitle.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        subtitle.setFont(new Font("SansSerif", Font.PLAIN, 15));
         subtitle.setForeground(TEXT);
         subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         header.add(title);
@@ -50,23 +50,23 @@ public class Signup extends JFrame {
         GridBagConstraints gbcRoot = new GridBagConstraints();
         gbcRoot.gridx = 0;
         gbcRoot.gridy = 0;
-        gbcRoot.insets = new Insets(12, 0, 0, 0);
+        gbcRoot.insets = new Insets(10, 0, 0, 0);
         gbcRoot.fill = GridBagConstraints.BOTH;
         gbcRoot.weightx = 1;
         gbcRoot.weighty = 1;
 
-        RoundedPanel leftInfo = new RoundedPanel(24);
+        RoundedPanel leftInfo = new RoundedPanel(22);
         leftInfo.setBackground(new Color(0, 0, 0, 110));
-        leftInfo.setBorder(new EmptyBorder(24, 24, 24, 24));
+        leftInfo.setBorder(new EmptyBorder(20, 20, 20, 20));
         leftInfo.setLayout(new BoxLayout(leftInfo, BoxLayout.Y_AXIS));
 
         JLabel infoTitle = new JLabel("Already have an account?");
-        infoTitle.setFont(new Font("SansSerif", Font.BOLD, 20));
+        infoTitle.setFont(new Font("SansSerif", Font.BOLD, 18));
         infoTitle.setForeground(ACCENT);
         infoTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel infoText = new JLabel("Sign in to continue playing.");
-        infoText.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        infoText.setFont(new Font("SansSerif", Font.PLAIN, 13));
         infoText.setForeground(TEXT);
         infoText.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -78,15 +78,15 @@ public class Signup extends JFrame {
         loginBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         leftInfo.add(infoTitle);
-        leftInfo.add(Box.createVerticalStrut(8));
+        leftInfo.add(Box.createVerticalStrut(6));
         leftInfo.add(infoText);
-        leftInfo.add(Box.createVerticalStrut(18));
+        leftInfo.add(Box.createVerticalStrut(14));
         leftInfo.add(loginBtn);
         leftInfo.add(Box.createVerticalGlue());
 
-        RoundedPanel formCard = new RoundedPanel(24);
+        RoundedPanel formCard = new RoundedPanel(22);
         formCard.setBackground(new Color(0, 0, 0, 150));
-        formCard.setBorder(new EmptyBorder(28, 28, 28, 28));
+        formCard.setBorder(new EmptyBorder(20, 20, 20, 20));
         formCard.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -97,15 +97,15 @@ public class Signup extends JFrame {
         gbc.weightx = 1;
 
         JLabel userLabel = label("Username", TEXT);
-        JTextField userField = field(TEXT);
+        JTextField userField = field();
         JLabel emailLabel = label("Email", TEXT);
-        JTextField emailField = field(TEXT);
+        JTextField emailField = field();
         JLabel phoneLabel = label("Phone", TEXT);
-        JTextField phoneField = field(TEXT);
+        JTextField phoneField = field();
         JLabel passLabel = label("Password", TEXT);
-        JPasswordField passField = passwordField(TEXT);
+        JPasswordField passField = passwordField();
         JLabel confirmLabel = label("Confirm Password", TEXT);
-        JPasswordField confirmField = passwordField(TEXT);
+        JPasswordField confirmField = passwordField();
 
         JPanel formGrid = new JPanel(new GridBagLayout());
         formGrid.setOpaque(false);
@@ -147,7 +147,7 @@ public class Signup extends JFrame {
         gbc.gridwidth = 2;
         formCard.add(formGrid, gbc);
 
-        JPanel actions = new JPanel(new FlowLayout(FlowLayout.CENTER, 14, 8));
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 6));
         actions.setOpaque(false);
 
         JComponent createBtn = actionButton("Create Account", PRIMARY, TEXT, ACCENT, () -> {
@@ -180,7 +180,7 @@ public class Signup extends JFrame {
 
         col.gridx = 0;
         col.weightx = 0.38;
-        col.insets = new Insets(0, 0, 0, 18);
+        col.insets = new Insets(0, 0, 0, 14);
         columns.add(leftInfo, col);
 
         col.gridx = 1;
@@ -196,45 +196,47 @@ public class Signup extends JFrame {
 
     private static JLabel label(String text, Color fg) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("SansSerif", Font.BOLD, 16));
+        label.setFont(new Font("SansSerif", Font.BOLD, 15));
         label.setForeground(fg);
         return label;
     }
 
-    private static JTextField field(Color fg) {
+    private static JTextField field() {
         JTextField field = new JTextField();
-        field.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        field.setForeground(fg);
-        field.setBackground(new Color(255, 255, 255, 235));
+        field.setFont(new Font("SansSerif", Font.PLAIN, 15));
+        field.setForeground(new Color(30, 30, 30));
+        field.setCaretColor(new Color(30, 30, 30));
+        field.setBackground(new Color(255, 255, 255, 245));
         field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(255, 255, 255, 90), 1),
-                new EmptyBorder(12, 12, 12, 12)));
+                BorderFactory.createLineBorder(new Color(255, 255, 255, 120), 1),
+                new EmptyBorder(10, 12, 10, 12)));
         return field;
     }
 
-    private static JPasswordField passwordField(Color fg) {
+    private static JPasswordField passwordField() {
         JPasswordField field = new JPasswordField();
-        field.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        field.setForeground(fg);
-        field.setBackground(new Color(255, 255, 255, 235));
+        field.setFont(new Font("SansSerif", Font.PLAIN, 15));
+        field.setForeground(new Color(30, 30, 30));
+        field.setCaretColor(new Color(30, 30, 30));
+        field.setBackground(new Color(255, 255, 255, 245));
         field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(255, 255, 255, 90), 1),
-                new EmptyBorder(12, 12, 12, 12)));
+                BorderFactory.createLineBorder(new Color(255, 255, 255, 120), 1),
+                new EmptyBorder(10, 12, 10, 12)));
         return field;
     }
 
     private static JComponent actionButton(String text, Color base, Color fg, Color glow, Runnable action) {
         JButton btn = new JButton(text);
         btn.setForeground(fg);
-        btn.setFont(new Font("SansSerif", Font.BOLD, 16));
+        btn.setFont(new Font("SansSerif", Font.BOLD, 15));
         btn.setOpaque(false);
         btn.setContentAreaFilled(false);
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        RoundedButton wrap = new RoundedButton(18, base, glow);
-        wrap.setBorder(new EmptyBorder(10, 28, 10, 28));
+        RoundedButton wrap = new RoundedButton(16, base, glow);
+        wrap.setBorder(new EmptyBorder(8, 22, 8, 22));
         wrap.setLayout(new BorderLayout());
         wrap.add(btn, BorderLayout.CENTER);
 
@@ -250,15 +252,15 @@ public class Signup extends JFrame {
     private static JComponent outlineButton(String text, Color base, Color fg, Color glow, Runnable action) {
         JButton btn = new JButton(text);
         btn.setForeground(fg);
-        btn.setFont(new Font("SansSerif", Font.BOLD, 16));
+        btn.setFont(new Font("SansSerif", Font.BOLD, 15));
         btn.setOpaque(false);
         btn.setContentAreaFilled(false);
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        RoundedButton wrap = new RoundedButton(18, new Color(0, 0, 0, 90), glow);
-        wrap.setBorder(new EmptyBorder(10, 24, 10, 24));
+        RoundedButton wrap = new RoundedButton(16, new Color(0, 0, 0, 90), glow);
+        wrap.setBorder(new EmptyBorder(8, 20, 8, 20));
         wrap.setLayout(new BorderLayout());
         wrap.add(btn, BorderLayout.CENTER);
 
@@ -341,4 +343,3 @@ public class Signup extends JFrame {
             super.paintComponent(g);
         }
     }
-}
