@@ -20,7 +20,7 @@ public class dangnhap extends JFrame {
         Color ACCENT = theme.accent;
 
         setTitle("Player Login");
-        setSize(720, 520);
+        setSize(820, 560);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -29,27 +29,70 @@ public class dangnhap extends JFrame {
         root.setBorder(new EmptyBorder(28, 36, 36, 36));
         setContentPane(root);
 
-        JPanel header = new JPanel(new BorderLayout());
+        JPanel header = new JPanel();
         header.setOpaque(false);
+        header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
         JLabel title = new JLabel("WELCOME BACK");
-        title.setFont(new Font("SansSerif", Font.BOLD, 30));
+        title.setFont(new Font("SansSerif", Font.BOLD, 32));
         title.setForeground(ACCENT);
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
         JLabel subtitle = new JLabel("Sign in to continue your game");
         subtitle.setFont(new Font("SansSerif", Font.PLAIN, 16));
         subtitle.setForeground(TEXT);
-        header.add(title, BorderLayout.NORTH);
-        header.add(subtitle, BorderLayout.SOUTH);
+        subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        header.add(title);
+        header.add(Box.createVerticalStrut(6));
+        header.add(subtitle);
         root.add(header, BorderLayout.NORTH);
 
-        RoundedPanel card = new RoundedPanel(24);
-        card.setBackground(new Color(0, 0, 0, 150));
-        card.setBorder(new EmptyBorder(28, 28, 28, 28));
-        card.setLayout(new GridBagLayout());
+        JPanel content = new JPanel(new GridBagLayout());
+        content.setOpaque(false);
+        GridBagConstraints gbcRoot = new GridBagConstraints();
+        gbcRoot.gridx = 0;
+        gbcRoot.gridy = 0;
+        gbcRoot.insets = new Insets(12, 0, 0, 0);
+        gbcRoot.fill = GridBagConstraints.BOTH;
+        gbcRoot.weightx = 1;
+        gbcRoot.weighty = 1;
+
+        RoundedPanel leftInfo = new RoundedPanel(24);
+        leftInfo.setBackground(new Color(0, 0, 0, 110));
+        leftInfo.setBorder(new EmptyBorder(24, 24, 24, 24));
+        leftInfo.setLayout(new BoxLayout(leftInfo, BoxLayout.Y_AXIS));
+
+        JLabel infoTitle = new JLabel("New here?");
+        infoTitle.setFont(new Font("SansSerif", Font.BOLD, 20));
+        infoTitle.setForeground(ACCENT);
+        infoTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel infoText = new JLabel("Create an account to start playing.");
+        infoText.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        infoText.setForeground(TEXT);
+        infoText.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JComponent signupBtn = outlineButton("Create Account", PRIMARY, TEXT, ACCENT, () -> {
+            Signup signup = new Signup();
+            signup.setVisible(true);
+            dispose();
+        });
+        signupBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        leftInfo.add(infoTitle);
+        leftInfo.add(Box.createVerticalStrut(8));
+        leftInfo.add(infoText);
+        leftInfo.add(Box.createVerticalStrut(18));
+        leftInfo.add(signupBtn);
+        leftInfo.add(Box.createVerticalGlue());
+
+        RoundedPanel formCard = new RoundedPanel(24);
+        formCard.setBackground(new Color(0, 0, 0, 150));
+        formCard.setBorder(new EmptyBorder(28, 28, 28, 28));
+        formCard.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(8, 0, 8, 0);
+        gbc.insets = new Insets(6, 0, 6, 0);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
 
@@ -58,15 +101,15 @@ public class dangnhap extends JFrame {
         JLabel passLabel = label("Password", TEXT);
         JPasswordField passField = passwordField(TEXT);
 
-        card.add(userLabel, gbc);
+        formCard.add(userLabel, gbc);
         gbc.gridy++;
-        card.add(userField, gbc);
+        formCard.add(userField, gbc);
         gbc.gridy++;
-        card.add(passLabel, gbc);
+        formCard.add(passLabel, gbc);
         gbc.gridy++;
-        card.add(passField, gbc);
+        formCard.add(passField, gbc);
 
-        JPanel actions = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 10));
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.CENTER, 14, 8));
         actions.setOpaque(false);
 
         JComponent continueBtn = actionButton("Continue", PRIMARY, TEXT, ACCENT, () -> {
@@ -74,24 +117,36 @@ public class dangnhap extends JFrame {
             menu.setVisible(true);
             dispose();
         });
-        JComponent signupBtn = outlineButton("Create Account", PRIMARY, TEXT, ACCENT, () -> {
-            Signup signup = new Signup();
-            signup.setVisible(true);
-            dispose();
-        });
         JComponent exitBtn = outlineButton("Exit", PRIMARY_DARK, TEXT, ACCENT, () -> System.exit(0));
 
         actions.add(continueBtn);
-        actions.add(signupBtn);
         actions.add(exitBtn);
 
-        JPanel centerWrap = new JPanel(new BorderLayout());
-        centerWrap.setOpaque(false);
-        centerWrap.setBorder(new EmptyBorder(20, 0, 0, 0));
-        centerWrap.add(card, BorderLayout.CENTER);
-        centerWrap.add(actions, BorderLayout.SOUTH);
+        JPanel formWrap = new JPanel(new BorderLayout());
+        formWrap.setOpaque(false);
+        formWrap.add(formCard, BorderLayout.CENTER);
+        formWrap.add(actions, BorderLayout.SOUTH);
 
-        root.add(centerWrap, BorderLayout.CENTER);
+        JPanel columns = new JPanel(new GridBagLayout());
+        columns.setOpaque(false);
+        GridBagConstraints col = new GridBagConstraints();
+        col.gridy = 0;
+        col.fill = GridBagConstraints.BOTH;
+        col.weighty = 1;
+
+        col.gridx = 0;
+        col.weightx = 0.42;
+        col.insets = new Insets(0, 0, 0, 18);
+        columns.add(leftInfo, col);
+
+        col.gridx = 1;
+        col.weightx = 0.58;
+        col.insets = new Insets(0, 0, 0, 0);
+        columns.add(formWrap, col);
+
+        content.add(columns, gbcRoot);
+        root.add(content, BorderLayout.CENTER);
+
         setVisible(true);
     }
 
