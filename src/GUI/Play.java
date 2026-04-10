@@ -171,7 +171,7 @@ public class Play extends JFrame {
 
         String symbol = isPlayer1 ? logic.getPlayerX() : logic.getPlayerO();
         JLabel title = new JLabel(
-                "<html><div style='text-align:center;'><span style='text-align:center;'><span style='font-size:18px;'>[" + symbol + "]</span><br/>" + player + "<br/>" + scoreWord + "</span></div></html>",
+                "<html><div style='text-align:center;'><span style='text-align:center;'><span style='font-size:18px;'>[" + symbol + "]</span><br/>" + player + "<br/>" + scoreWord + "</span></div>",
                 SwingConstants.CENTER
         );
         title.setForeground(titleColor);
@@ -197,7 +197,7 @@ public class Play extends JFrame {
     }
 
     private JComponent createBoardPanel(int size, Color boardBg, Color tileBg, Color markColor, Color glow) {
-        int gap = size == 3 ? 14 : 10;
+        int gap = size == 3 ? 14 : 14;
         RoundedPanel boardWrap = new RoundedPanel(26);
         boardWrap.setBackground(boardBg);
         boardWrap.setBorder(new EmptyBorder(22, 22, 22, 22));
@@ -225,6 +225,9 @@ public class Play extends JFrame {
             cell.addActionListener(e -> logic.handleBoardClick(boardButtons[index]));
 
             RoundedButton tile = new RoundedButton(16, tileBg, glow);
+            if (size > 3) {
+                tile.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 80), 1));
+            }
             tile.setLayout(new BorderLayout());
             tile.add(cell, BorderLayout.CENTER);
 
@@ -257,7 +260,6 @@ public class Play extends JFrame {
             g2.dispose();
             super.paintComponent(g);
         }
-    
     }
 
     static class RoundedPanel extends JPanel {
